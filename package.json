@@ -1,0 +1,24 @@
+{
+  "name": "relay-api-gateway",
+  "version": "0.1.0",
+  "description": "HTTP front door for Relay: authenticates, validates the shape of a message and hands it to Relay's queue (outbox)",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "rm -rf dist-test && tsc -p tsconfig.json --outDir dist-test && node --test \"dist-test/**/*.spec.js\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "start": "node dist/main.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.7.2"
+  }
+}

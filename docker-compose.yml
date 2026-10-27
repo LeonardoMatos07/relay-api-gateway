@@ -1,0 +1,22 @@
+name: relay-api-gateway
+
+# Joins the network of the Relay stack (run `make up` in the relay repository first).
+services:
+  gateway:
+    build: .
+    image: relay-api-gateway:local
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      PORT: '8080'
+      RELAY_URL: ${RELAY_URL:-http://api:3000}
+      ALLOWED_CHANNELS: ${ALLOWED_CHANNELS:-email}
+    ports: ['8080:8080']
+    networks: [relay]
+
+networks:
+  relay:
+    name: relay_default
+    external: true
