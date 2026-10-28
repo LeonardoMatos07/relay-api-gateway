@@ -5,6 +5,8 @@ export interface MessageRequest {
   to: string;
   subject?: string;
   body: string;
+  html?: string;
+  variables?: Record<string, string | number>;
   metadata?: Record<string, string>;
 }
 
@@ -31,6 +33,13 @@ export function validateRequest(input: unknown, allowedChannels: readonly Channe
   if (typeof raw.to !== 'string' || raw.to.trim() === '') errors.push('to is required');
   if (typeof raw.body !== 'string' || raw.body.length === 0) errors.push('body is required');
   if (raw.subject !== undefined && typeof raw.subject !== 'string') errors.push('subject must be a string');
+  if (raw.html !== undefined && typeof raw.html !== 'string') errors.push('html must be a string');
+  if (
+    raw.variables !== undefined &&
+    (typeof raw.variables !== 'object' || raw.variables === null || Array.isArray(raw.variables))
+  ) {
+    errors.push('variables must be an object');
+  }
   if (raw.metadata !== undefined && (typeof raw.metadata !== 'object' || raw.metadata === null)) {
     errors.push('metadata must be an object of strings');
   }
@@ -43,6 +52,8 @@ export function validateRequest(input: unknown, allowedChannels: readonly Channe
       to: (raw.to as string).trim(),
       body: raw.body as string,
       ...(raw.subject !== undefined ? { subject: raw.subject as string } : {}),
+      ...(raw.html !== undefined ? { html: raw.html as string } : {}),
+      ...(raw.variables !== undefined ? { variables: raw.variables as Record<string, string | number> } : {}),
       ...(raw.metadata !== undefined ? { metadata: raw.metadata as Record<string, string> } : {}),
     },
   };

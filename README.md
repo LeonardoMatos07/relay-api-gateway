@@ -35,13 +35,15 @@ would have no row to update. So the gateway only forwards, and everything Relay 
 }
 ```
 
-| Field      | Notes                                                                      |
-| ---------- | -------------------------------------------------------------------------- |
-| `channel`  | `email`, `sms`, `whatsapp` or `push`, limited to `ALLOWED_CHANNELS`        |
-| `to`       | E-mail address, E.164 phone (`+5571999999999`) or device token, by channel |
-| `subject`  | Required for `email`                                                       |
-| `body`     | Up to 4,000 characters                                                     |
-| `metadata` | Optional, up to 20 string values                                           |
+| Field       | Notes                                                                                                                     |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `channel`   | `email`, `sms`, `whatsapp` or `push`, limited to `ALLOWED_CHANNELS`                                                       |
+| `to`        | E-mail address, E.164 phone (`+5571999999999`) or device token, by channel                                                |
+| `subject`   | Required for `email`                                                                                                      |
+| `body`      | Up to 4,000 characters                                                                                                    |
+| `html`      | Optional, `email` only: the HTML part (the product's own template)                                                        |
+| `variables` | Optional: values for `{{name}}` placeholders in `subject`, `body` and `html`; Relay renders them (HTML-escaped in `html`) |
+| `metadata`  | Optional, up to 20 string values                                                                                          |
 
 Optional header `Idempotency-Key` (8 to 128 characters): sending the same key and message again
 returns the original message (`200` with `Idempotent-Replayed: true`); the same key with a different
@@ -72,7 +74,7 @@ Every response carries `X-Request-Id`; send your own to correlate logs.
 | `RELAY_API_KEY`    | empty                   | Sent to Relay as `X-Api-Key` when Relay has `API_KEYS` set            |
 | `GATEWAY_API_KEYS` | empty                   | Keys callers must send, comma separated. Empty accepts anyone (warns) |
 | `ALLOWED_CHANNELS` | all four                | Channels accepted; set it to what your workers really deliver         |
-| `MAX_BODY_BYTES`   | `65536`                 |                                                                       |
+| `MAX_BODY_BYTES`   | `524288`                |                                                                       |
 | `RELAY_TIMEOUT_MS` | `5000`                  |                                                                       |
 
 ## Run

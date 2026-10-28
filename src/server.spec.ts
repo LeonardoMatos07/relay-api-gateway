@@ -93,6 +93,14 @@ describe('gateway: accepting a message', () => {
     server.close();
   });
 
+  it('forwards html and variables untouched, for Relay to render', async () => {
+    const { url, server } = await startGateway();
+    const templated = { ...message, html: '<p>{{name}}</p>', variables: { name: 'Ana', n: 2 } };
+    await post(url, templated);
+    assert.deepEqual(JSON.parse(seen[0]?.body ?? ''), templated);
+    server.close();
+  });
+
   it('forwards the Idempotency-Key and says when Relay replayed it', async () => {
     relayBehavior = () => ({
       status: 200,

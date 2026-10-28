@@ -41,7 +41,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     relayApiKey: env.RELAY_API_KEY || undefined,
     apiKeys: list(env.GATEWAY_API_KEYS),
     allowedChannels: allowed as Channel[],
-    maxBodyBytes: integer('MAX_BODY_BYTES', 64 * 1024, env),
+    maxBodyBytes: integer('MAX_BODY_BYTES', 512 * 1024, env),
     relayTimeoutMs: integer('RELAY_TIMEOUT_MS', 5000, env),
   };
 }
